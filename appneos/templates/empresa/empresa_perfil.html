@@ -1,0 +1,31 @@
+{% extends '../base.html' %}
+{% load material_form %}
+{% load static %}
+{% block tituloPagina %}
+Perfil da Empresa
+{% endblock tituloPagina %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <img src="{{empresa.caminhologo.url}}" style="width:100%">
+            <div class="caption"></div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <ul class="list-group">
+          <li class="list-group-item">idEmpresa: {{empresa.idempresa}}</li>
+          <li class="list-group-item">Razao Social: {{empresa.razaoemp}}</li>
+          <li class="list-group-item">Cnpj: {{empresa.cnpjemp}}</li>
+          <li class="list-group-item">Endereço: {{empresa.enderecoemp}}</li>
+          <li class="list-group-item">Complemento: {{empresa.complemp}}</li>
+          <li class="list-group-item">Bairro: R${{empresa.bairroemp}}</li>
+          <li class="list-group-item">Cidade: {{empresa.cidadeemp}}</li>
+          <li class="list-group-item">Estado: {{empresa.ufemp.uf}}</li>
+        </ul>
+    </div>
+</div>
+{% endblock content %}
+
+

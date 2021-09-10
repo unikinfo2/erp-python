@@ -1,0 +1,112 @@
+{% load static %}
+{% load funcoes %}
+
+<!DOCTYPE html>
+<html lang="en" class='fonte-roboto'>
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #0C3C26;">
+       <a class="navbar-brand" href="{% url 'empresa_listar' %}">
+          <img src="{% static 'img/logo.png'%}" class="logo-menu">
+           <br>
+          NeosERP - Sistema Empresarial
+       </a>
+       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+       </button>
+       <ul class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+                {% setvar "0" as submenu %}
+                {% for menu in menulista %}
+                    {% if menu.menuordem|length == 3 %}
+                        {% ifequal submenu '1' %}
+                                    </ul>
+                                </li>
+                        {% endifequal %}
+                        {% ifequal submenu '2' %}
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                        {% endifequal %}
+                        {% setvar "1" as submenu %}
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{ menu.nomeopcao }}
+                            </a>
+                            <ul class="dropdown-menu">
+                    {% elif menu.menuordem|length == 6 and menu.url == '#' %}
+                        {% ifequal submenu '2' %}
+                                    </ul>
+                                </li>
+                        {% endifequal %}
+                        {% setvar "2" as submenu %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              {{ menu.nomeopcao }}
+                            </a>
+                            <ul class="submenu dropdown-menu">
+
+                    {% else %}
+                        <li><a class="dropdown-item" href="#">{{ menu.nomeopcao }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                    </ul>
+            {% endif %}
+            {% if user.is_authenticated != true  %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/logout">Login</a>
+                </li>
+            {% endif %}
+       </ul>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <script
+        src="https://code.jquery.com/jquery-3.4.0.min.js"
+        integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script>
+        // Prevent closing from click inside dropdown
+        $(document).on('click', '.dropdown-menu', function (e) {
+          e.stopPropagation();
+        });
+
+        // make it as accordion for smaller screens
+        if ($(window).width() < 992) {
+          $('.dropdown-menu a').click(function(e){
+            e.preventDefault();
+              if($(this).next('.submenu').length){
+                $(this).next('.submenu').toggle();
+              }
+              $('.dropdown').on('hide.bs.dropdown', function () {
+             $(this).find('.submenu').hide();
+          })
+          });
+        }
+    </script>
+    <footer>
+        <p class="rodape">© 2021 - Uni-K Tecnologia da Informação</p>
+    </footer>
+</body>
+</html>
